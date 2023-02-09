@@ -2,5 +2,6 @@
 conda create -n pt-py3.9 python=3.9 --yes
 conda install numpy --yes
 conda install tqdm --yes
+conda install pandas --yes
 conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia --yes
 pip install jieba
