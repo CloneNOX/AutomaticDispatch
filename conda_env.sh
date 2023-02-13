@@ -3,4 +3,5 @@ conda create -n fasttext python=3.9 --yes
 conda install numpy --yes
 conda install tqdm --yes
 conda install pandas --yes
+conda install scipy --yes
 pip install fasttext

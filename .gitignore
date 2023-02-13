@@ -130,3 +130,5 @@ dmypy.json
 
 # added by this repo
 data/
+*unused*
+*old*
