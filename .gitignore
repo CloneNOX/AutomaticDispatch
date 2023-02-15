@@ -132,5 +132,7 @@ dmypy.json
 data/
 model/
 log/
+tmp/
 *unused*
 *old*
+*模型训练文档*
