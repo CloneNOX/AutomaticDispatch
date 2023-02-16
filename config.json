@@ -1,3 +1,13 @@
 {
-    "data_path":"./data/"
+    "data_path":"./data/",
+    "dropout": 0.5,                                             
+    "require_improvement": 1000,
+    "epoch": 10,
+    "batch_size": 64,
+    "pad_size": 32,
+    "lr": 1e-2,
+    "embedding_dim" : 300,
+    "hidden_dim": 256,
+    "embedding_pretrained": false,
+    "data_set_path": "train_set.json"
 }
