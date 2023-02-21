@@ -40,7 +40,7 @@ def readDataSet(path):
 
 if __name__ == '__main__':
     config = getConfig()
-    readDataSet(config['data_path'] + config['data_set_path'])
+    readDataSet(config['data_path'] + config['data_set_name'])
     model_tag1 = fasttext.train_supervised(
         input = TEMP_DIR + 'set1.txt',
         lr = config['lr'],
