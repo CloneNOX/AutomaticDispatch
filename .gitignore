@@ -133,6 +133,7 @@ data/
 model/
 log/
 tmp/
+flask_bag/
 *unused*
 *old*
 *模型训练文档*
