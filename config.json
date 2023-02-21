@@ -9,5 +9,5 @@
     "embedding_dim" : 300,
     "hidden_dim": 256,
     "embedding_pretrained": false,
-    "data_set_path": "train_set.json"
+    "data_set_name": "train_set.json"
 }

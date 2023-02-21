@@ -42,7 +42,6 @@ if __name__ == '__main__':
                 }
     ids = list(total_item.keys())
     random.shuffle(ids)
-    print(ids[:10])
     train_item = {}
     for id in ids[:len(ids) * 4 // 5]:
         train_item[id] = total_item[id]
