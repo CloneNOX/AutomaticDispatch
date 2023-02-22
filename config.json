@@ -1,13 +1,12 @@
 {
-    "data_path":"/root/autodl-tmp/AutomaticDispatchData/",
-    "dropout": 0.5,                                             
-    "require_improvement": 1000,
-    "epoch": 50,
-    "batch_size": 64,
-    "pad_size": 32,
+    "data_path": "./data/",
+    "model_path": "./model/",
+    "epoch": 20,
     "lr": 1e-1,
-    "embedding_dim" : 300,
     "hidden_dim": 256,
     "embedding_pretrained": false,
-    "data_set_path": "train_set.json"
+    "data_set_name": "train_set.json",
+    "model_label_1_name": "model_for_label_1.model",
+    "model_label_2_name": "model_for_label_2.model",
+    "model_label_3_name": "model_for_label_3.model"
 }
