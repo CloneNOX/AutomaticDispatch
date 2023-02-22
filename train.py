@@ -67,8 +67,8 @@ if __name__ == '__main__':
 
     # 保存模型
     model_label_1.save_model(config['model_path'] + config['model_label_1_name'])
-    model_label_2.save_model(config['model_path'] + config['model_label_1_name'])
-    model_label_2.save_model(config['model_path'] + config['model_label_1_name'])
+    model_label_2.save_model(config['model_path'] + config['model_label_2_name'])
+    model_label_2.save_model(config['model_path'] + config['model_label_3_name'])
 
     try:
         os.remove(TEMP_DIR + 'set1.txt')

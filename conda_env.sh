@@ -6,5 +6,6 @@ conda install tqdm --yes
 conda install pandas --yes
 conda install scipy --yes
 conda install flask --yes
+conda install xlrd --yes
 pip install fasttext
 pip install jieba
