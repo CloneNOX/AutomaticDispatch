@@ -4,4 +4,6 @@ conda install numpy --yes
 conda install tqdm --yes
 conda install pandas --yes
 conda install scipy --yes
+conda install flask --yes
 pip install fasttext
+pip install jieba
