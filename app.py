@@ -10,11 +10,14 @@ import fasttext
 import utils
 import os
 import signal
+from datetime import datetime
 
 # 放在header中的apptoken的值,用于验证客户端身份
 APP_TOKEN = 'DAT3X71FH87_2sB'
 # 声明APP
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
+app.config.update(RESTFUL_JSON=dict(ensure_ascii=False))
 API = Api(app)
 # 装载配置文件
 config = {}
@@ -46,6 +49,7 @@ class Dispatch(Resource):
                 'success': 'False',
                 'msg': '无效的 apptoken'
             }
+        
 
         # 读取文件
         tid = request.form['tid']
@@ -55,7 +59,7 @@ class Dispatch(Resource):
 
         # 提取工单内容，分词（按字符分词，字符之间用空格隔开）
         content = utils.fixText(f_content)
-        
+
         # 分类预测
         result_1 = model_1.predict(content)
         result_2 = model_2.predict(content)
@@ -66,6 +70,16 @@ class Dispatch(Resource):
         probs_1 = result_1[1][0]
         probs_2 = result_2[1][0]
         probs_3 = result_3[1][0]
+
+        with open('./ticket_info.txt', 'a') as file:
+            file.write('[' + datetime.now().strftime(r'%Y-%m-%d %H:%M:%S') + '] ')
+            file.write(tid + ' ')
+            file.write(content)
+            file.write(
+                'department 1:' + department_1 +\
+                ', department 2: ' + department_2 +\
+                ', department 3: ' + department_3 + '\n'            
+            )
 
         # 返回派单结果
         return {
