@@ -139,3 +139,7 @@ learn_from/
 *old*
 *模型训练文档*
 run.pid
+login.txt
+*.docx
+*.doc
+.vscode/
