@@ -16,7 +16,6 @@ from datetime import datetime
 APP_TOKEN = 'DAT3X71FH87_2sB'
 # 声明APP
 app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False
 app.config.update(RESTFUL_JSON=dict(ensure_ascii=False))
 API = Api(app)
 # 装载配置文件
