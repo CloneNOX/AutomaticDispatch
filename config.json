@@ -1,7 +1,7 @@
 {
     "data_path": "./data/",
     "model_path": "./model/",
-    "epoch": 20,
+    "epoch": 30,
     "lr": 1e-1,
     "hidden_dim": 256,
     "embedding_pretrained": false,
