@@ -130,7 +130,7 @@ dmypy.json
 
 # added by this repo
 data/
-models/
+model/
 log/
 tmp/
 flask_bag/
@@ -138,4 +138,8 @@ learn_from/
 *unused*
 *old*
 *模型训练文档*
-model/
+run.pid
+login.txt
+*.docx
+*.doc
+.vscode/

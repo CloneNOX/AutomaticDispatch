@@ -10,12 +10,18 @@ import fasttext
 import utils
 import os
 import signal
+from datetime import datetime
 
 # 放在header中的apptoken的值,用于验证客户端身份
 APP_TOKEN = 'DAT3X71FH87_2sB'
 # 声明APP
 app = Flask(__name__)
+app.config.update(RESTFUL_JSON=dict(ensure_ascii=False))
 API = Api(app)
+# 装载配置文件
+config = {}
+with open('./config.json', 'r') as f:
+    config = json.loads(f.read())
 
 # 无参数路由，打开初始页面
 @app.route('/')
@@ -23,19 +29,26 @@ def start():
     return render_template('index.html')
 
 # 文本分类模型
-model_1 = fasttext.load_model('./models/no2_lr_10e1_epoch100_tag1')
-model_2 = fasttext.load_model('./models/no2_lr_10e1_epoch100_tag2')
-model_3 = fasttext.load_model('./models/no2_lr_10e1_epoch100_tag3')
+model_1 = fasttext.load_model(config['model_path'] + config['model_label_1_name'])
+model_2 = fasttext.load_model(config['model_path'] + config['model_label_2_name'])
+model_3 = fasttext.load_model(config['model_path'] + config['model_label_3_name'])
 
 class Dispatch(Resource):
     def post(self):
         # 客户端身份验证
-        apptoken = request.headers['apptoken']
+        if 'Apptoken' not in list(request.headers.keys()):
+            print(list(request.headers.keys()))
+            return {
+                'success': 'False',
+                'msg': '没有收到token'
+            }
+        apptoken = request.headers['Apptoken']
         if apptoken != APP_TOKEN:
             return {
-                'success': False,
+                'success': 'False',
                 'msg': '无效的 apptoken'
             }
+        
 
         # 读取文件
         tid = request.form['tid']
@@ -45,7 +58,7 @@ class Dispatch(Resource):
 
         # 提取工单内容，分词（按字符分词，字符之间用空格隔开）
         content = utils.fixText(f_content)
-        
+
         # 分类预测
         result_1 = model_1.predict(content)
         result_2 = model_2.predict(content)
@@ -56,6 +69,16 @@ class Dispatch(Resource):
         probs_1 = result_1[1][0]
         probs_2 = result_2[1][0]
         probs_3 = result_3[1][0]
+
+        with open('./ticket_info.txt', 'a') as file:
+            file.write('[' + datetime.now().strftime(r'%Y-%m-%d %H:%M:%S') + '] ')
+            file.write(tid + ' ')
+            file.write(content)
+            file.write(
+                'department 1:' + department_1 +\
+                ', department 2: ' + department_2 +\
+                ', department 3: ' + department_3 + '\n'            
+            )
 
         # 返回派单结果
         return {
@@ -75,8 +98,7 @@ API.add_resource(Dispatch, '/dispatch')
 
 
 def kill_pid_if_exists():
-    """如果之前有一个进程在运行，就杀掉该进程
-    """
+    # 如果之前有一个进程在运行，就杀掉该进程
     try:
         pid = open('run.pid', 'r').read()
         os.kill(int(pid), signal.SIGTERM)

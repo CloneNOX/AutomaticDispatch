@@ -40,7 +40,8 @@ def readTrainData():
                         'tag_level_2': tag_level_2,
                         'tag_level_3': tag_level_3
                     }
-            except:
+            except Exception as e:
+                print(e)
                 print('文件{}内容有误，请检查'.format(data_path + filename))
 
     ids = list(total_item.keys())
