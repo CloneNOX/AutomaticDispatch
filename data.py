@@ -5,7 +5,7 @@ import numpy as np
 import random
 data_path = './data/'
 
-# 数据预处理
+# 数据预处理，从文件中读取了原始文本之后，进行文本内容的修改或添加。
 def preProcess(text: str):
     
     return text
