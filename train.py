@@ -20,11 +20,15 @@ def readDataSet(path):
         data_set = json.loads(s)
     set1 = []
     set2 = []
-    set3 = []
+    set3 = []    
+
     for id in list(data_set.keys()):
         set1.append('__label__' + data_set[id]['tag_level_1'] + ' ' + fixText(data_set[id]['text']))
         set2.append('__label__' + resetLabelLv2(data_set[id]['tag_level_2']) + ' ' + fixText(data_set[id]['text']))
         set3.append('__label__' + resetLabelLv3(data_set[id]['tag_level_3']) + ' ' + fixText(data_set[id]['text']))
+    
+        
+        
     try:
         os.mkdir(TEMP_DIR)
     except:

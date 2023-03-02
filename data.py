@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import numpy as np
 import random
+from utils import resetLabelLv2, resetLabelLv3
 data_path = './data/'
 
 # 数据预处理，从文件中读取了原始文本之后，进行文本内容的修改或添加。
@@ -44,9 +45,33 @@ def readTrainData():
                 print(e)
                 print('文件{}内容有误，请检查'.format(data_path + filename))
 
+    # 数据增强，减少数量少于2的标签
+    label_count1 = {}
+    label_count2 = {}
+    label_count3 = {}
+    for id in list(total_item.keys()):
+        tag = total_item[id]['tag_level_1']
+        if tag in label_count1:
+            label_count1[total_item[id]['tag_level_1']] += 1
+        else:
+            label_count1[total_item[id]['tag_level_1']] = 1
+
+        tag = resetLabelLv2(total_item[id]['tag_level_2'])
+        if tag in label_count2:
+            label_count2[tag] += 1
+        else:
+            label_count2[tag] = 1
+
+        tag = resetLabelLv3(total_item[id]['tag_level_3'])
+        if tag in label_count3:
+            label_count3[tag] += 1
+        else:
+            label_count3[tag] = 1
+
+    print('读入训练样本{}条'.format(len(total_item)))
     ids = list(total_item.keys())
     random.shuffle(ids)
-    print('读入训练样本{}条'.format(len(ids)))
+    
 
     with open(data_path + 'train_set.json', 'w') as f:
         s = json.dumps(total_item)
