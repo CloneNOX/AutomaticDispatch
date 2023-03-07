@@ -14,32 +14,37 @@ def getConfig():
     return config
 
 # 读入数据集的json文件，处理成fasttext接口使用的"文本__label__标签"形式，以txt文件存储
-def readDataSet(path):
-    with open(path, 'r') as f:
+def readDataSet(config):
+    set1 = []
+    with open(config['data_path'] + config['dataset_label_1_name'], 'r') as f:
         s = f.read()
         data_set = json.loads(s)
-    set1 = []
+        for id in list(data_set.keys()):
+            set1.append('__label__' + data_set[id]['label_level_1'] + ' ' + fixText(data_set[id]['text']))
     set2 = []
-    set3 = []    
-
-    for id in list(data_set.keys()):
-        set1.append('__label__' + data_set[id]['tag_level_1'] + ' ' + fixText(data_set[id]['text']))
-        set2.append('__label__' + resetLabelLv2(data_set[id]['tag_level_2']) + ' ' + fixText(data_set[id]['text']))
-        set3.append('__label__' + resetLabelLv3(data_set[id]['tag_level_3']) + ' ' + fixText(data_set[id]['text']))
-    
-        
+    with open(config['data_path'] + config['dataset_label_2_name'], 'r') as f:
+        s = f.read()
+        data_set = json.loads(s)
+        for id in list(data_set.keys()):
+            set2.append('__label__' + resetLabelLv2(data_set[id]['label_level_2']) + ' ' + fixText(data_set[id]['text']))
+    set3 = []
+    with open(config['data_path'] + config['dataset_label_3_name'], 'r') as f:
+        s = f.read()
+        data_set = json.loads(s)
+        for id in list(data_set.keys()):
+            set3.append('__label__' + resetLabelLv3(data_set[id]['label_level_3']) + ' ' + fixText(data_set[id]['text']))
         
     try:
         os.mkdir(TEMP_DIR)
     except:
         pass
-    with open('./tmp/set1.txt', 'w') as f:
+    with open(TEMP_DIR + 'set1.txt', 'w') as f:
         for l in set1:
             f.write(l + '\n')
-    with open('./tmp/set2.txt', 'w') as f:
+    with open(TEMP_DIR + 'set2.txt', 'w') as f:
         for l in set2:
             f.write(l + '\n')
-    with open('./tmp/set3.txt', 'w') as f:
+    with open(TEMP_DIR + 'set3.txt', 'w') as f:
         for l in set3:
             f.write(l + '\n')
 

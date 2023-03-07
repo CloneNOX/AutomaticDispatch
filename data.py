@@ -3,15 +3,23 @@ import pandas as pd
 import json
 import numpy as np
 import random
-from utils import resetLabelLv2, resetLabelLv3
-data_path = './data/'
+from copy import copy
+
+# 从config中读出数据集路径
+with open('./config.json', 'r') as f:
+    s = f.read()
+    config = json.loads(s)
+data_path = config['data_path']
+dataset_label_1_name =  config['dataset_label_1_name']
+dataset_label_2_name =  config['dataset_label_2_name']
+dataset_label_3_name =  config['dataset_label_3_name']
 
 # 数据预处理，从文件中读取了原始文本之后，进行文本内容的修改或添加。
 def preProcess(text: str):
-    
+    # 暂时没有预处理过程
     return text
 
-def readTrainData():
+def readTrainData(need_test_set = False):
     total_item = {}
     for filename in os.listdir(data_path):
         if(filename.lower().endswith('.xls') or filename.lower().endswith('xlsx')):
@@ -31,48 +39,107 @@ def readTrainData():
                             ('' if pd.isnull(df.loc[row, '市民诉求']) else '市民诉求:' + str(df.loc[row, '市民诉求'])) + \
                             ('' if pd.isnull(df.loc[row, '补充信息']) else '补充信息:' + str(df.loc[row, '补充信息']))
                     text = preProcess(text)
-                    tag_level_1 = 'undefine' if pd.isnull(df.loc[row, '办理部门一级']) else str(df.loc[row, '办理部门一级'])
-                    tag_level_2 = 'undefine' if pd.isnull(df.loc[row, '办理部门二级']) else str(df.loc[row, '办理部门二级'])
-                    tag_level_3 = 'undefine' if pd.isnull(df.loc[row, '办理部门三级']) else str(df.loc[row, '办理部门三级'])
+                    label_level_1 = 'undefine' if pd.isnull(df.loc[row, '办理部门一级']) else str(df.loc[row, '办理部门一级'])
+                    label_level_2 = 'undefine' if pd.isnull(df.loc[row, '办理部门二级']) else str(df.loc[row, '办理部门二级'])
+                    label_level_3 = 'undefine' if pd.isnull(df.loc[row, '办理部门三级']) else str(df.loc[row, '办理部门三级'])
                     total_item[str(id)] = {
                         'title': title,
                         'text': text,
-                        'tag_level_1': tag_level_1,
-                        'tag_level_2': tag_level_2,
-                        'tag_level_3': tag_level_3
+                        'label_level_1': label_level_1,
+                        'label_level_2': label_level_2,
+                        'label_level_3': label_level_3
                     }
             except Exception as e:
                 print(e)
                 print('文件{}内容有误，请检查'.format(data_path + filename))
 
-    # 数据增强，减少数量少于2的标签
+    print('文件统计出训练样本{}条'.format(len(total_item)))
+    
+    if need_test_set:
+        ids = list(total_item.keys())
+        random.shuffle(ids)
+        train_item = {}
+        for id in ids[:len(ids) * 4 // 5]:
+            train_item[id] = total_item[id]
+        
+        test_item = {}
+        for id in ids[len(ids) * 4 // 5:]:
+            test_item[id] = total_item[id]
+
+        del total_item
+
+    train_set_id_1, train_set_id_2, train_set_id_3 = dataEnhance(train_item)
+
+    train_set_1 = {}
+    train_set_2 = {}
+    train_set_3 = {}
+    for id in train_set_id_1:
+        train_set_1[id] = copy(train_item[id])
+        train_set_1[id].pop('label_level_2')
+        train_set_1[id].pop('label_level_3')
+    for id in train_set_id_2:
+        train_set_2[id] = copy(train_item[id])
+        train_set_2[id].pop('label_level_1')
+        train_set_2[id].pop('label_level_3')
+    for id in train_set_id_3:
+        train_set_3[id] = copy(train_item[id])
+        train_set_3[id].pop('label_level_1')
+        train_set_3[id].pop('label_level_2')
+    print('数据增强后1级标签训练集样本{}条'.format(len(train_set_1)))
+    print('数据增强后2级标签训练集样本{}条'.format(len(train_set_2)))
+    print('数据增强后3级标签训练集样本{}条'.format(len(train_set_3)))
+
+    with open(data_path + dataset_label_1_name, 'w') as f:
+        s = json.dumps(train_set_1, ensure_ascii=False)
+        f.write(s)
+    with open(data_path + dataset_label_2_name, 'w') as f:
+        s = json.dumps(train_set_2, ensure_ascii=False)
+        f.write(s)
+    with open(data_path + dataset_label_3_name, 'w') as f:
+        s = json.dumps(train_set_3, ensure_ascii=False)
+        f.write(s)
+
+    if need_test_set:
+        with open(data_path + 'test_set.json', 'w') as f:
+            s = json.dumps(test_item)
+            f.write(s)
+
+# ====数据增强（适配特定数据集）====
+
+# 输入：train_item字典，输出：3个数据集的下标列表
+def dataEnhance(train_item: dict):
     label_count1 = {}
     label_count2 = {}
     label_count3 = {}
-    for id in list(total_item.keys()):
-        tag = total_item[id]['tag_level_1']
-        if tag in label_count1:
-            label_count1[total_item[id]['tag_level_1']] += 1
+
+    train_set_id_1 = []
+    train_set_id_2 = []
+    train_set_id_3 = []
+
+    # 调整一级标签===
+    too_much_tag_id = []
+    for id in train_item:
+        if train_item[id]['label_level_1'] == '荔湾区政府':
+            too_much_tag_id.append(id)
         else:
-            label_count1[total_item[id]['tag_level_1']] = 1
+            train_set_id_1.append(id)
+    random.shuffle(too_much_tag_id)
+    train_set_id_1 += too_much_tag_id[0:30000]
 
-        tag = resetLabelLv2(total_item[id]['tag_level_2'])
-        if tag in label_count2:
-            label_count2[tag] += 1
-        else:
-            label_count2[tag] = 1
+    #==============
 
-        tag = resetLabelLv3(total_item[id]['tag_level_3'])
-        if tag in label_count3:
-            label_count3[tag] += 1
-        else:
-            label_count3[tag] = 1
+    # 调整二级标签===
+    train_set_id_2 = train_item.keys()
 
-    print('读入训练样本{}条'.format(len(total_item)))
-    ids = list(total_item.keys())
-    random.shuffle(ids)
-    
+    #==============
 
-    with open(data_path + 'train_set.json', 'w') as f:
-        s = json.dumps(total_item)
-        f.write(s)
+    # 调整三级标签===
+    train_set_id_3 = train_item.keys()
+
+    #==============
+    return train_set_id_1, train_set_id_2, train_set_id_3
+
+# ====END 数据增强部分====
+
+if __name__ == '__main__':
+    readTrainData(True)
