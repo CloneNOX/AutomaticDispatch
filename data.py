@@ -55,14 +55,15 @@ def readTrainData(need_test_set = False):
 
     print('文件统计出训练样本{}条'.format(len(total_item)))
     
+    train_item = {}
+    test_item = {}
     if need_test_set:
         ids = list(total_item.keys())
         random.shuffle(ids)
-        train_item = {}
+        
         for id in ids[:len(ids) * 4 // 5]:
             train_item[id] = total_item[id]
         
-        test_item = {}
         for id in ids[len(ids) * 4 // 5:]:
             test_item[id] = total_item[id]
 

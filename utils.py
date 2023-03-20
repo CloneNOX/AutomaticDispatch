@@ -30,6 +30,8 @@ def resetLabelLv3(label):
     return label
 
 # 根据换行符切分句子
+# 输入：一段文本
+# 输出：切分后的
 def split_text(text):
     splited_text = re.split(r'\n+|\r+|\r\n|<br>', text)
     while '' in splited_text:

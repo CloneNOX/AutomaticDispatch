@@ -12,6 +12,10 @@ class MyFastText():
         self.model = fasttext.load_model(path)
 
     def predict(self, text):
+        res = self.model.predict(fixText(text))
+        return res
+
+    def split_and_predict(self, text):
         label2count = {}
         splited_text = split_text(text)
         for st in splited_text:
