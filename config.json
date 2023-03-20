@@ -6,7 +6,7 @@
     "hidden_dim": 256,
     "embedding_pretrained": false,
     "data_set_name": "train_set.json",
-    "model_label_1_name": "model_for_label_1.model",
-    "model_label_2_name": "model_for_label_2.model",
-    "model_label_3_name": "model_for_label_3.model"
+    "model_label_1_name": "model_for_label_1_fix_label.model",
+    "model_label_2_name": "model_for_label_2_fix_label.model",
+    "model_label_3_name": "model_for_label_3_fix_label.model"
 }
