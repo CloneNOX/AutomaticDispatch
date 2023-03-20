@@ -140,6 +140,9 @@ learn_from/
 *模型训练文档*
 run.pid
 login.txt
+ticket_info.txt
 *.docx
 *.doc
 .vscode/
+*.ppt
+*.pptx
