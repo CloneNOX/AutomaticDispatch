@@ -32,11 +32,11 @@ def readTrainData(need_test_set = False):
                     if(not pd.isnull(df.loc[row, '市民原始诉求'])):
                         text = str(df.loc[row, '市民原始诉求'])
                     else:
-                        text = ('' if pd.isnull(df.loc[row, '涉事主体']) else '涉事主体:' + str(df.loc[row, '涉事主体'])) + \
-                            ('' if pd.isnull(df.loc[row, '主体地址']) else '主体地址:' + str(df.loc[row, '主体地址'])) + \
-                            ('' if pd.isnull(df.loc[row, '事发地点']) else '事发地点:' + str(df.loc[row, '事发地点'])) + \
-                            ('' if pd.isnull(df.loc[row, '标签组']) else '标签组:' + str(df.loc[row, '标签组'])) + \
-                            ('' if pd.isnull(df.loc[row, '市民诉求']) else '市民诉求:' + str(df.loc[row, '市民诉求'])) + \
+                        text = ('' if pd.isnull(df.loc[row, '涉事主体']) else '涉事主体:' + str(df.loc[row, '涉事主体'])) + '\n' +\
+                            ('' if pd.isnull(df.loc[row, '主体地址']) else '主体地址:' + str(df.loc[row, '主体地址'])) + '\n' +\
+                            ('' if pd.isnull(df.loc[row, '事发地点']) else '事发地点:' + str(df.loc[row, '事发地点'])) + '\n' +\
+                            ('' if pd.isnull(df.loc[row, '标签组']) else '标签组:' + str(df.loc[row, '标签组'])) + '\n' +\
+                            ('' if pd.isnull(df.loc[row, '市民诉求']) else '市民诉求:' + str(df.loc[row, '市民诉求'])) + '\n' +\
                             ('' if pd.isnull(df.loc[row, '补充信息']) else '补充信息:' + str(df.loc[row, '补充信息']))
                     text = preProcess(text)
                     label_level_1 = 'undefine' if pd.isnull(df.loc[row, '办理部门一级']) else str(df.loc[row, '办理部门一级'])
@@ -101,7 +101,7 @@ def readTrainData(need_test_set = False):
 
     if need_test_set:
         with open(data_path + 'test_set.json', 'w') as f:
-            s = json.dumps(test_item)
+            s = json.dumps(test_item, ensure_ascii=False)
             f.write(s)
 
 # ====数据增强（适配特定数据集）====
@@ -124,7 +124,7 @@ def dataEnhance(train_item: dict):
         else:
             train_set_id_1.append(id)
     random.shuffle(too_much_tag_id)
-    train_set_id_1 += too_much_tag_id[0:30000]
+    train_set_id_1 += too_much_tag_id[0:10000]
 
     #==============
 

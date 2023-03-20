@@ -6,11 +6,11 @@ import json
 import pandas as pd
 import numpy as np
 import time
-import fasttext
 import utils
 import os
 import signal
 from datetime import datetime
+from model import MyFastText
 
 # 放在header中的apptoken的值,用于验证客户端身份
 APP_TOKEN = 'DAT3X71FH87_2sB'
@@ -29,9 +29,12 @@ def start():
     return render_template('index.html')
 
 # 文本分类模型
-model_1 = fasttext.load_model(config['model_path'] + config['model_label_1_name'])
-model_2 = fasttext.load_model(config['model_path'] + config['model_label_2_name'])
-model_3 = fasttext.load_model(config['model_path'] + config['model_label_3_name'])
+model_1 = MyFastText()
+model_1.load_model(config['model_path'] + config['model_label_1_name'])
+model_2 = MyFastText()
+model_2.load_model(config['model_path'] + config['model_label_2_name'])
+model_3 = MyFastText()
+model_3.load_model(config['model_path'] + config['model_label_3_name'])
 
 class Dispatch(Resource):
     def post(self):

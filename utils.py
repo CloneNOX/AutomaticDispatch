@@ -24,5 +24,14 @@ def resetLabelLv2(label):
 def resetLabelLv3(label):
     if(re.search(r'[\u4e00-\u9fa50-9]+街(道)*', label)):
         label = re.search(r'街(道)*.*', label).group() # 保留街(道)后面的内容
+        if "街道" not in label: 
+            label = label.replace("街", "街道") # 统一为“街道”
         label = re.sub(r'[(|（][\u4e00-\u9fa50-9]*[)|）]', '', label) # 去括号及括号里内容
     return label
+
+# 根据换行符切分句子
+def split_text(text):
+    splited_text = re.split(r'\n+|\r+|\r\n|<br>', text)
+    while '' in splited_text:
+        splited_text.remove('')
+    return splited_text
