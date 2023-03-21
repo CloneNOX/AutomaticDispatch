@@ -22,9 +22,9 @@ def readDataSet(config):
         data_set = json.loads(s)
         for id in list(data_set.keys()):
             text = data_set[id]['text']
-            splited_text = split_text(text)
-            for text in splited_text:
-                set1.append('__label__' + data_set[id]['label_level_1'] + ' ' + fixText(text))
+            # splited_text = split_text(text)
+            # for text in splited_text:
+            set1.append('__label__' + data_set[id]['label_level_1'] + ' ' + fixText(text))
     
     set2 = []
     with open(config['data_path'] + config['dataset_label_2_name'], 'r') as f:
@@ -32,9 +32,9 @@ def readDataSet(config):
         data_set = json.loads(s)
         for id in list(data_set.keys()):
             text = data_set[id]['text']
-            splited_text = split_text(text)
-            for text in splited_text:
-                set2.append('__label__' + resetLabelLv2(data_set[id]['label_level_2']) + ' ' + fixText(text))
+            # splited_text = split_text(text)
+            # for text in splited_text:
+            set2.append('__label__' + resetLabelLv2(data_set[id]['label_level_2']) + ' ' + fixText(text))
     
     set3 = []
     with open(config['data_path'] + config['dataset_label_3_name'], 'r') as f:
@@ -42,9 +42,9 @@ def readDataSet(config):
         data_set = json.loads(s)
         for id in list(data_set.keys()):
             text = data_set[id]['text']
-            splited_text = split_text(text)
-            for text in splited_text:
-                set3.append('__label__' + resetLabelLv3(data_set[id]['label_level_3']) + ' ' + fixText(text))
+            # splited_text = split_text(text)
+            # for text in splited_text:
+            set3.append('__label__' + resetLabelLv3(data_set[id]['label_level_3']) + ' ' + fixText(text))
         
     try:
         os.mkdir(TEMP_DIR)

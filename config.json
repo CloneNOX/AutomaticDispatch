@@ -8,7 +8,7 @@
     "dataset_label_1_name": "train_set1.json",
     "dataset_label_2_name": "train_set2.json",
     "dataset_label_3_name": "train_set3.json",
-    "model_label_1_name": "model_for_label_1.model",
-    "model_label_2_name": "model_for_label_2.model",
-    "model_label_3_name": "model_for_label_3.model"
+    "model_label_1_name": "model_for_label_1(not split).model",
+    "model_label_2_name": "model_for_label_2(not split).model",
+    "model_label_3_name": "model_for_label_3(not split).model"
 }
