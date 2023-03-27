@@ -118,14 +118,15 @@ def dataEnhance(train_item: dict):
     train_set_id_3 = []
 
     # 调整一级标签===
-    too_much_tag_id = []
-    for id in train_item:
-        if train_item[id]['label_level_1'] == '荔湾区政府':
-            too_much_tag_id.append(id)
-        else:
-            train_set_id_1.append(id)
-    random.shuffle(too_much_tag_id)
-    train_set_id_1 += too_much_tag_id[0:10000]
+    # too_much_tag_id = []
+    # for id in train_item:
+    #     if train_item[id]['label_level_1'] == '荔湾区政府':
+    #         too_much_tag_id.append(id)
+    #     else:
+    #         train_set_id_1.append(id)
+    # random.shuffle(too_much_tag_id)
+    # train_set_id_1 += too_much_tag_id[0:10000]
+    train_set_id_1 = train_item.keys()
 
     #==============
 
