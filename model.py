@@ -1,4 +1,3 @@
-import fasttext
 from utils import split_text, fixText
 
 class MyFastText():
@@ -40,3 +39,7 @@ class MyFastText():
     
     def save(self, path: str):
         self.model.save_model(path)
+
+
+class myPaddleH:
+    pass
