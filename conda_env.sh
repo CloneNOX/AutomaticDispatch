@@ -15,7 +15,7 @@ pip install paddlepaddle
 # charset_normalizer-3.1.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 # urllib3-1.26.15-py2.py3-none-any.whl
 # idna-3.4-py3-none-any.whl
-pip install --upgrade paddlenlp>=2.0.0rc -i https://pypi.org/simple
+pip install --upgrade paddlenlp -i https://pypi.org/simple
 # pip安装paddlenlp时的whl依赖（工作平台为x86-64）：
 # paddlenlp-2.5.2-py3-none-any.whl
 # colorlog-6.7.0-py2.py3-none-any.whl
