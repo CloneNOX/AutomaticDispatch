@@ -1,7 +1,7 @@
 # 请确保先进入了工作的conda环境，使用--yes以自动确认
 pip install jieba
-pip install paddlepaddle-gpu # 如果有支持的gpu，安装paddle的gpu依赖
-# pip install paddlepaddle
+# pip install paddlepaddle-gpu # 如果有支持的gpu，安装paddle的gpu依赖
+pip install paddlepaddle
 # pip安装paddle时的whl依赖（工作平台为x86-64）：
 # paddlepaddle-2.4.2-cp38-cp38-manylinux1_x86_64.whl
 # six-1.16.0-py2.py3-none-any.whl
