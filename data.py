@@ -97,18 +97,22 @@ def readTrainData(need_dev_set = True):
     
     with open(data_path + 'train.txt', 'w') as f:
         for item in train_item:
+            if item['text'] == '':
+                continue
             f.write(item['text'] + '\t' +\
                     item['label_level_1'] + ',' + \
                     item['label_level_1'] + '##' + item['label_level_2'] + ',' + \
-                    item['label_level_1'] + '##' + item['label_level_2'] + item['label_level_3']
+                    item['label_level_1'] + '##' + item['label_level_2'] + '##' + item['label_level_3'] + '\n'
             )
 
     with open(data_path + 'dev.txt', 'w') as f:
         for item in dev_item:
+            if item['text'] == '':
+                continue
             f.write(item['text'] + '\t' +\
                     item['label_level_1'] + ',' + \
                     item['label_level_1'] + '##' + item['label_level_2'] + ',' + \
-                    item['label_level_1'] + '##' + item['label_level_2'] + item['label_level_3']
+                    item['label_level_1'] + '##' + item['label_level_2'] + '##' + item['label_level_3'] + '\n'
             )
 
 # ====数据增强（适配特定数据集）====
