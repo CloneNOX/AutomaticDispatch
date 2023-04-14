@@ -147,5 +147,5 @@ ticket_info.txt
 *.ppt
 *.pptx
 train_log.txt
-hierarchical/checkpoint
+hierarchical/checkpoint/
 *.7z
