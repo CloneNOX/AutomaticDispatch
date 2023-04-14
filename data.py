@@ -153,5 +153,33 @@ def dataEnhance(train_item: dict):
 
 # ====END 数据增强部分====
 
+def readTestSet():
+    test_item = []
+    with open(data_path + 'test_set.json', 'r') as f:
+        content = json.loads(f.read())
+        for id in content:
+            test_item.append({
+                'id': id,
+                'title': content[id]['title'],
+                'text': ''.join(preProcess(content[id]['text'])),
+                'label_level_1': content[id]['label_level_1'],
+                'label_level_2': resetLabelLv2(content[id]['label_level_2']),
+                'label_level_3': resetLabelLv3(content[id]['label_level_3'])
+            })
+    with open(data_path + 'test.txt', 'w') as f:
+        for item in test_item:
+            if item['text'] == '':
+                continue
+            f.write(item['text'] + '\t' +\
+                    item['label_level_1'] + ',' + \
+                    item['label_level_1'] + '##' + item['label_level_2'] + ',' + \
+                    item['label_level_1'] + '##' + item['label_level_2'] + '##' + item['label_level_3'] + '\n'
+            )
+    with open(data_path + 'data.txt', 'w') as f:
+        for item in test_item:
+            if item['text'] == '':
+                continue
+            f.write(item['text'] + '\n')
+
 if __name__ == '__main__':
     readTrainData(True)
