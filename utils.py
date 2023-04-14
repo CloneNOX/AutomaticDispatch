@@ -3,7 +3,7 @@ import jieba
 
 # 整理输入的文本，通过只保留中文和数字部分，通过jieba库分词，用于生成喂给模型的数据
 def fixText(text):
-    text = re.sub(r'[^\u4e00-\u9fa50-9]+', '', text)
+    text = re.sub(r'[^\u4e00-\u9fa50-9a-zA-z]+', '', text)
     text = ' '.join(jieba.lcut(text))
     return text
 
