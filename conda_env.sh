@@ -1,11 +1,100 @@
 # 请确保先进入了工作的conda环境，使用--yes以自动确认
-conda create -n fasttext python=3.9 --yes
-conda activate fasttext
-conda install numpy --yes
-conda install tqdm --yes
-conda install pandas --yes
-conda install scipy --yes
-conda install flask --yes
-conda install xlrd --yes
-pip install fasttext
 pip install jieba
+# pip install paddlepaddle-gpu # 如果有支持的gpu，安装paddle的gpu依赖
+pip install paddlepaddle
+# pip安装paddle时的whl依赖（工作平台为x86-64）：
+# paddlepaddle-2.4.2-cp38-cp38-manylinux1_x86_64.whl
+# six-1.16.0-py2.py3-none-any.whl
+# astor-0.8.1-py2.py3-none-any.whl
+# opt_einsum-3.3.0-py3-none-any.whl
+# Pillow-9.5.0-cp38-cp38-manylinux_2_28_x86_64.whl
+# decorator-5.1.1-py3-none-any.whl
+# numpy-1.24.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# paddle_bfloat-0.1.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# protobuf-3.20.0-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.whl
+# charset_normalizer-3.1.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# urllib3-1.26.15-py2.py3-none-any.whl
+# idna-3.4-py3-none-any.whl
+pip install --upgrade paddlenlp -i https://pypi.org/simple
+# pip安装paddlenlp时的whl依赖（工作平台为x86-64）：
+# paddlenlp-2.5.2-py3-none-any.whl
+# colorlog-6.7.0-py2.py3-none-any.whl
+# seqeval-1.2.2.tar.gz(运行setup.py)
+# tqdm-4.65.0-py3-none-any.whl
+# paddle2onnx-1.0.6-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+# jieba-0.42.1.tar.gz
+# huggingface_hub-0.13.3-py3-none-any.whl
+# fastapi-0.95.0-py3-none-any.whl
+# typer-0.7.0-py3-none-any.whl
+# multiprocess-0.70.12.2-py38-none-any.whl
+# datasets-2.11.0-py3-none-any.whl
+# visualdl-2.5.1-py3-none-any.whl
+# Flask_Babel-2.0.0-py3-none-any.whl
+# dill-0.3.4-py2.py3-none-any.whl
+# uvicorn-0.21.1-py3-none-any.whl
+# rich-13.3.3-py3-none-any.whl
+# paddlefsl-1.1.0-py3-none-any.whl
+# sentencepiece-0.1.97-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# colorama-0.4.6-py2.py3-none-any.whl
+# responses-0.18.0-py3-none-any.whl
+# pyarrow-11.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# packaging-23.0-py3-none-any.whl
+# fsspec-2023.3.0-py3-none-any.whl
+# aiohttp-3.8.4-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# PyYAML-6.0-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+# requests>=2.19.0 
+# numpy>=1.17 
+# xxhash-3.2.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# pandas-1.5.3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# Jinja2-3.1.2-py3-none-any.whl
+# Flask-2.2.3-py3-none-any.whl
+# pytz-2023.3-py2.py3-none-any.whl
+# Babel-2.12.1-py3-none-any.whl
+# typing_extensions-4.5.0-py3-none-any.whl
+# filelock-3.10.7-py3-none-any.whl
+# pydantic-1.10.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# starlette-0.26.1-py3-none-any.whl
+# markdown_it_py-2.2.0-py3-none-any.whl
+# Pygments-2.14.0-py3-none-any.whl
+# scikit_learn-1.2.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# click-8.1.3-py3-none-any.whl
+# h11-0.14.0-py3-none-any.whl
+# gradio-3.24.1-py3-none-any.whl
+# bce_python_sdk-0.8.83-py3-none-any.whl
+# attrdict-2.0.1-py2.py3-none-any.whl
+# matplotlib-3.7.1-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+# psutil-5.9.4-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# onnx-1.13.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# tritonclient-2.32.0-py3-none-manylinux1_x86_64.whl
+# x2paddle-1.4.1-py3-none-any.whl
+# rarfile-4.0-py3-none-any.whl
+# visualdl-2.5.0-py3-none-any.whl
+# visualdl-2.4.2-py3-none-any.whl
+# Werkzeug-2.2.3-py3-none-any.whl
+# importlib_metadata-6.1.0-py3-none-any.whl
+# itsdangerous-2.1.2-py3-none-any.whl
+# attrs-22.2.0-py3-none-any.whl
+# yarl-1.8.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# frozenlist-1.3.3-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# multidict-6.0.4-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# aiosignal-1.3.1-py3-none-any.whl
+# MarkupSafe-2.1.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# mdurl-0.1.2-py3-none-any.whl
+# scipy-1.10.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# joblib-1.2.0-py3-none-any.whl
+# threadpoolctl-3.1.0-py3-none-any.whl
+# anyio-3.6.2-py3-none-any.whl
+# future-0.18.3.tar.gz
+# pycryptodome-3.17-cp35-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# contourpy-1.0.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# kiwisolver-1.4.4-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.whl
+# cycler-0.11.0-py3-none-any.whl
+# pyparsing-3.0.9-py3-none-any.whl
+# python_dateutil-2.8.2-py2.py3-none-any.whl
+# fonttools-4.39.3-py3-none-any.whl
+# importlib_resources-5.12.0-py3-none-any.whl
+# sniffio-1.3.0-py3-none-any.whl
+# zipp-3.15.0-py3-none-any.whl
+conda install scikit-learn --yes
+conda install chardet --yes
+pip install cchardet

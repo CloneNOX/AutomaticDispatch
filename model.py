@@ -1,42 +1,96 @@
-import fasttext
-from utils import split_text, fixText
+import functools
+import os
+import sys
+import logging
+from tqdm import tqdm
 
-class MyFastText():
-    def __init__(self) -> None:
-        pass
+import paddle
+import paddle.nn.functional as F
+from paddle.io import BatchSampler, DataLoader
+from hierarchical.utils import preprocess_function, read_local_dataset
 
-    def train(self, input: str, lr: float, dim: int, epoch: int):
-        self.model = fasttext.train_supervised(input=input, lr=lr, dim=dim, epoch=epoch)
+from paddlenlp.data import DataCollatorWithPadding
+from paddlenlp.datasets import load_dataset
+from paddlenlp.transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+class myPaddleHierarchical:
+    def __init__(self,
+                 device = 'gpu',
+                 dataset_dir = './hierarchical/data/',
+                 params_path = './hierarchical/checkpoint/',
+                 max_seq_length = 128,
+                 batch_size = 32,
+                 data_file = 'data.txt',
+                 label_file = 'label.txt'
+        ) -> None:
+        self.device = device
+        self.dataset_dir = dataset_dir
+        self.params_path = params_path
+        self.max_seq_length = max_seq_length
+        self.batch_size = batch_size
+        self.data_file = data_file
+        self.label_file = label_file
 
     def load_model(self, path: str):
-        self.model = fasttext.load_model(path)
+        self.model = AutoModelForSequenceClassification.from_pretrained(path)
 
-    def predict(self, text):
-        res = self.model.predict(fixText(text))
-        return res
+    def predict(self):
+        """
+        Predicts the data labels.
+        """
+        paddle.set_device(self.device)
+        model = AutoModelForSequenceClassification.from_pretrained(self.params_path)
+        tokenizer = AutoTokenizer.from_pretrained(self.params_path)
 
-    def split_and_predict(self, text):
-        label2count = {}
-        splited_text = split_text(text)
-        for st in splited_text:
-            res = self.model.predict(fixText(st))
-            pre = res[0][0]
-            prob = res[1][0]
-            if pre in label2count:
-                label2count[pre]['count'] += 1
-                label2count[pre]['prob_sum'] += prob
-            else:
-                label2count[pre] = {'count': 1, 'prob_sum': prob}
-        max_count = 0
-        max_prob_sum = 0
-        for label in label2count:
-            if label2count[label]['count'] > max_count or \
-            (label2count[label]['count'] == max_count and label2count[label]['prob_sum'] > max_prob_sum):
-                final_label = label
-                max_count = label2count[label]['count']
-                max_prob_sum = label2count[label]['prob_sum']
+        label_list = []
+        label_path = os.path.join(self.dataset_dir, self.label_file)
+<<<<<<< HEAD
+        print(self.dataset_dir)
+=======
+>>>>>>> ff522ab168dec0a57abf80335a9d4fa2e54a476e
+        with open(label_path, "r", encoding="utf-8") as f:
+            for i, line in enumerate(f):
+                label_list.append(line.strip())
 
-        return ([final_label], [max_prob_sum / max_count])
+        data_ds = load_dataset(
+            read_local_dataset, path=os.path.join(self.dataset_dir, self.data_file), is_test=True, lazy=False
+        )
+
+        trans_func = functools.partial(
+            preprocess_function,
+            tokenizer=tokenizer,
+            max_seq_length=self.max_seq_length,
+            label_nums=len(label_list),
+            is_test=True,
+        )
+
+        data_ds = data_ds.map(trans_func)
+
+        # batchify dataset
+        collate_fn = DataCollatorWithPadding(tokenizer)
+        data_batch_sampler = BatchSampler(data_ds, batch_size=self.batch_size, shuffle=False)
+
+        data_data_loader = DataLoader(dataset=data_ds, batch_sampler=data_batch_sampler, collate_fn=collate_fn)
+
+        results = []
+        model.eval()
+        for batch in tqdm(data_data_loader, desc="predicting"):
+            logits = model(**batch)
+            probs = F.sigmoid(logits
+                              ).numpy()
+            for prob in probs:
+                labels = []
+                for i, p in enumerate(prob):
+                    if p > 0.5:
+                        labels.append(label_list[i])
+                results.append(labels)
+        return results
     
-    def save(self, path: str):
-        self.model.save_model(path)
+class HiddenPrints:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
