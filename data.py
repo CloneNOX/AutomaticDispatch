@@ -166,6 +166,11 @@ def readTestSet():
                 'label_level_2': resetLabelLv2(content[id]['label_level_2']),
                 'label_level_3': resetLabelLv3(content[id]['label_level_3'])
             })
+    if item['label_level_2'] == "undefine":
+        item['label_level_2'] = "无对应二级办理部门"  
+    if item['label_level_3'] == "undefine":
+        item['label_level_3'] = "无对应三级办理部门"  
+
     with open(data_path + 'test.txt', 'w') as f:
         for item in test_item:
             if item['text'] == '':
@@ -182,4 +187,5 @@ def readTestSet():
             f.write(item['text'] + '\n')
 
 if __name__ == '__main__':
-    readTrainData(True)
+    #readTrainData(True)
+     readTestSet()

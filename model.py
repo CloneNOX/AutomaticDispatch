@@ -16,7 +16,7 @@ from paddlenlp.transformers import AutoModelForSequenceClassification, AutoToken
 class myPaddleHierarchical:
     def __init__(self,
                  device = 'gpu',
-                 dataset_dir = './data/',
+                 dataset_dir = './hierarchical/data/',
                  params_path = './hierarchical/checkpoint/',
                  max_seq_length = 128,
                  batch_size = 32,
@@ -44,6 +44,10 @@ class myPaddleHierarchical:
 
         label_list = []
         label_path = os.path.join(self.dataset_dir, self.label_file)
+<<<<<<< HEAD
+        print(self.dataset_dir)
+=======
+>>>>>>> ff522ab168dec0a57abf80335a9d4fa2e54a476e
         with open(label_path, "r", encoding="utf-8") as f:
             for i, line in enumerate(f):
                 label_list.append(line.strip())
