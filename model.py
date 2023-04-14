@@ -44,7 +44,10 @@ class myPaddleHierarchical:
 
         label_list = []
         label_path = os.path.join(self.dataset_dir, self.label_file)
+<<<<<<< HEAD
         print(self.dataset_dir)
+=======
+>>>>>>> ff522ab168dec0a57abf80335a9d4fa2e54a476e
         with open(label_path, "r", encoding="utf-8") as f:
             for i, line in enumerate(f):
                 label_list.append(line.strip())
