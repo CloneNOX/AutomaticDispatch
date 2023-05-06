@@ -12,6 +12,7 @@ from hierarchical.utils import preprocess_function, read_local_dataset
 from paddlenlp.data import DataCollatorWithPadding
 from paddlenlp.datasets import load_dataset
 from paddlenlp.transformers import AutoModelForSequenceClassification, AutoTokenizer
+from paddlenlp.utils.log import logger
 
 class myPaddleHierarchical:
     def __init__(self,
@@ -44,10 +45,6 @@ class myPaddleHierarchical:
 
         label_list = []
         label_path = os.path.join(self.dataset_dir, self.label_file)
-<<<<<<< HEAD
-        print(self.dataset_dir)
-=======
->>>>>>> ff522ab168dec0a57abf80335a9d4fa2e54a476e
         with open(label_path, "r", encoding="utf-8") as f:
             for i, line in enumerate(f):
                 label_list.append(line.strip())
@@ -76,8 +73,7 @@ class myPaddleHierarchical:
         model.eval()
         for batch in tqdm(data_data_loader, desc="predicting"):
             logits = model(**batch)
-            probs = F.sigmoid(logits
-                              ).numpy()
+            probs = F.sigmoid(logits).numpy()
             for prob in probs:
                 labels = []
                 for i, p in enumerate(prob):
@@ -85,12 +81,3 @@ class myPaddleHierarchical:
                         labels.append(label_list[i])
                 results.append(labels)
         return results
-    
-class HiddenPrints:
-    def __enter__(self):
-        self._original_stdout = sys.stdout
-        sys.stdout = open(os.devnull, 'w')
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        sys.stdout.close()
-        sys.stdout = self._original_stdout

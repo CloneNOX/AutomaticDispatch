@@ -150,3 +150,5 @@ ticket_info.txt
 train_log.txt
 hierarchical/checkpoint/
 *.7z
+ticket_info.bak.txt
+app_run_log.bak.txt
