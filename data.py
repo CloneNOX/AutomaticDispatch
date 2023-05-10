@@ -16,7 +16,7 @@ data_path = config['data_path']
 
 # 数据预处理，从文件中读取了原始文本之后，进行文本内容的修改或添加。
 def preProcess(text: str):
-    # 保留中文、数字、英文字母
+    # 保留
     text = re.sub(r'[^\u4e00-\u9fa50-9a-zA-z]+', '', text)
     return text
 
@@ -153,7 +153,6 @@ def dataEnhance(train_item: dict):
 
 # ====END 数据增强部分====
 
-# 读入预先筛选好的测试数据集
 def readTestSet():
     test_item = []
     with open(data_path + 'test_set.json', 'r') as f:
@@ -188,5 +187,5 @@ def readTestSet():
             f.write(item['text'] + '\n')
 
 if __name__ == '__main__':
-    readTrainData(True)
-    #readTestSet()
+    #readTrainData(True)
+     readTestSet()
