@@ -15,8 +15,8 @@ def resetLabelLv2(label):
         label = re.search(r'.+街(道)*', label).group() # 去除街道后面的内容
         if "街道" not in label: 
             label = label.replace("街", "街道") # 统一为“街道”
-    if(re.search(r'.+[区|市]', label)):
-        label = re.sub(re.search(r'.+[区|市]', label).group(), '', label) # 去除市、区
+    if(re.search(r'.+[区]', label)):
+        label = re.sub(re.search(r'.+[区]', label).group(), '', label) # 去除市、区
     return label
 
 # 重设办理部门3级，减少类别数量

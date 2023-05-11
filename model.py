@@ -23,7 +23,7 @@ class myPaddleHierarchical:
                  batch_size = 32,
                  data_file = 'data.txt',
                  label_file = 'label.txt'
-        ) -> None:
+        ):
         self.device = device
         self.dataset_dir = dataset_dir
         self.params_path = params_path
@@ -32,15 +32,14 @@ class myPaddleHierarchical:
         self.data_file = data_file
         self.label_file = label_file
 
-    def load_model(self, path: str):
-        self.model = AutoModelForSequenceClassification.from_pretrained(path)
+    def load_model(self):
+        self.model = AutoModelForSequenceClassification.from_pretrained(self.params_path)
 
     def predict(self):
         """
         Predicts the data labels.
         """
         paddle.set_device(self.device)
-        model = AutoModelForSequenceClassification.from_pretrained(self.params_path)
         tokenizer = AutoTokenizer.from_pretrained(self.params_path)
 
         label_list = []
@@ -70,9 +69,9 @@ class myPaddleHierarchical:
         data_data_loader = DataLoader(dataset=data_ds, batch_sampler=data_batch_sampler, collate_fn=collate_fn)
 
         results = []
-        model.eval()
+        self.model.eval()
         for batch in tqdm(data_data_loader, desc="predicting"):
-            logits = model(**batch)
+            logits = self.model(**batch)
             probs = F.sigmoid(logits).numpy()
             for prob in probs:
                 labels = []
