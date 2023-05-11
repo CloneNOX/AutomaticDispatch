@@ -187,5 +187,5 @@ def readTestSet():
             f.write(item['text'] + '\n')
 
 if __name__ == '__main__':
-    #readTrainData(True)
-     readTestSet()
+    readTrainData(True)
+    # readTestSet()
