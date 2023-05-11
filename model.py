@@ -31,7 +31,7 @@ class myPaddleHierarchical:
         self.label_file = label_file
 
     def load_model(self, path=None):
-        if path == None:
+        if path is None:
             self.model = AutoModelForSequenceClassification.from_pretrained(self.params_path)
             self.tokenizer = AutoTokenizer.from_pretrained(self.params_path)
         else:
@@ -81,7 +81,7 @@ class myPaddleHierarchical:
                 results.append(labels)
         return results[0]
 
-    def batch_predict(self):
+    def batch_predict(self, data_file=None):
         """
         Predicts the data labels.
         """
@@ -95,8 +95,10 @@ class myPaddleHierarchical:
                 label_list.append(line.strip())
 
         # 加载数据集
+        if data_file is None:
+            data_file = self.data_file
         data_ds = load_dataset(
-            read_local_dataset, path=os.path.join(self.dataset_dir, self.data_file), is_test=True, lazy=False
+            read_local_dataset, path=os.path.join(self.dataset_dir, data_file), is_test=True, lazy=False
         )
         trans_func = functools.partial(
             preprocess_function,
