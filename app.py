@@ -10,7 +10,7 @@ import utils
 import os
 import signal
 from datetime import datetime
-from model import MyFastText
+from model import myPaddleHierarchical
 
 # 放在header中的apptoken的值,用于验证客户端身份
 APP_TOKEN = 'DAT3X71FH87_2sB'
@@ -29,12 +29,8 @@ def start():
     return render_template('index.html')
 
 # 文本分类模型
-model_1 = MyFastText()
-model_1.load_model(config['model_path'] + config['model_label_1_name'])
-model_2 = MyFastText()
-model_2.load_model(config['model_path'] + config['model_label_2_name'])
-model_3 = MyFastText()
-model_3.load_model(config['model_path'] + config['model_label_3_name'])
+model = myPaddleHierarchical()
+model.load_model('./model/checkpoint/')
 
 class Dispatch(Resource):
     def post(self):
@@ -60,27 +56,25 @@ class Dispatch(Resource):
         f_content = f.read().decode('utf-8')
 
         # 提取工单内容，分词（按字符分词，字符之间用空格隔开）
-        content = utils.fixText(f_content)
+        content = ''.join(utils.fixText(f_content))
 
         # 分类预测
-        result_1 = model_1.predict(content)
-        result_2 = model_2.predict(content)
-        result_3 = model_3.predict(content)
-        department_1 = result_1[0][0][9:]
-        department_2 = result_2[0][0][9:]
-        department_3 = result_3[0][0][9:]
-        probs_1 = result_1[1][0]
-        probs_2 = result_2[1][0]
-        probs_3 = result_3[1][0]
+        result = model.predict(content)
+        department_1 = result[0][0]
+        department_2 = result[1][0]
+        department_3 = result[2][0]
+        probs_1 = result[0][1]
+        probs_2 = result[1][1]
+        probs_3 = result[2][1]
 
         with open('./ticket_info.txt', 'a') as file:
-            file.write('[' + datetime.now().strftime(r'%Y-%m-%d %H:%M:%S') + '] ')
-            file.write(tid + ' ')
-            file.write(content)
+            file.write('[' + datetime.now().strftime(r'%Y-%m-%d %H:%M:%S') + ']\t')
+            file.write(tid + '\t')
+            file.write(content + '\t')
             file.write(
                 'department 1:' + department_1 +\
-                ', department 2: ' + department_2 +\
-                ', department 3: ' + department_3 + '\n'            
+                '\tdepartment 2: ' + department_2 +\
+                '\tdepartment 3: ' + department_3 + '\n'            
             )
 
         # 返回派单结果

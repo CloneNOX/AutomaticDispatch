@@ -1,9 +1,9 @@
 # AutomaticDispatch
-本分支为基于PaddleNLP层次文本分类接口的自动派单系统。
+本分支为基于PaddleNLP接口的自动派单系统。
 
 ### 目前进度
 
-初步应用PaddleNLP的层级文本分类接口：https://github.com/PaddlePaddle/PaddleNLP/tree/develop/applications/text_classification/hierarchical
+调研PaddleNLP的层级文本分类接口：https://github.com/PaddlePaddle/PaddleNLP/tree/develop/applications/text_classification/hierarchical
 
 ### 文本预处理
 

@@ -58,11 +58,11 @@ nest-asyncio==1.5.6
 numpy==1.24.3
 opt-einsum==3.3.0
 packaging==23.1
-paddle-bfloat==0.1.7 -i https://pypi.tuna.tsinghua.edu.cn/simple
-paddle2onnx==1.0.6 -i https://pypi.tuna.tsinghua.edu.cn/simple
-paddlefsl==1.1.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
-paddlenlp==2.5.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
-paddlepaddle-gpu==2.4.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
+paddle-bfloat==0.1.7 -i https://www.paddlepaddle.org.cn/whl/windows/mkl/avx/stable.html
+paddle2onnx==1.0.6 -i https://www.paddlepaddle.org.cn/whl/windows/mkl/avx/stable.html
+paddlefsl==1.1.0 -i https://www.paddlepaddle.org.cn/whl/windows/mkl/avx/stable.html
+paddlenlp==2.5.2 -i https://www.paddlepaddle.org.cn/whl/windows/mkl/avx/stable.html
+paddlepaddle-gpu==2.4.2 -i https://www.paddlepaddle.org.cn/whl/windows/mkl/avx/stable.html
 pandas==2.0.1
 parso==0.8.3
 pexpect==4.8.0
