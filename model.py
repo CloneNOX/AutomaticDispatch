@@ -21,7 +21,7 @@ class myPaddleHierarchical:
                  batch_size = 32,
                  data_file = 'data.txt',
                  label_file = 'label.txt'
-        ) -> None:
+        ):
         self.device = device
         self.dataset_dir = dataset_dir
         self.params_path = params_path

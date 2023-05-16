@@ -1,5 +1,6 @@
 import re
 import jieba
+jieba.lcut('测试')
 
 # 整理输入的文本，通过只保留中文和数字部分，通过jieba库分词，用于生成喂给模型的数据
 def fixText(text):
@@ -13,7 +14,7 @@ import re
 def resetLabelLv2(label):
     if(re.search(r'.+街(道)*', label)):
         label = re.search(r'.+街(道)*', label).group() # 去除街道后面的内容
-        if "街道" not in label: 
+        if "街道" not in label:
             label = label.replace("街", "街道") # 统一为“街道”
     if(re.search(r'.+[区]', label)):
         label = re.sub(re.search(r'.+[区]', label).group(), '', label) # 去除市、区

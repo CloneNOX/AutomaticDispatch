@@ -63,18 +63,18 @@ class Dispatch(Resource):
         department_1 = result[0][0]
         department_2 = result[1][0]
         department_3 = result[2][0]
-        probs_1 = result[0][1]
-        probs_2 = result[1][1]
-        probs_3 = result[2][1]
+        probs_1 = float(result[0][1])
+        probs_2 = float(result[1][1])
+        probs_3 = float(result[2][1])
 
         with open('./ticket_info.txt', 'a') as file:
             file.write('[' + datetime.now().strftime(r'%Y-%m-%d %H:%M:%S') + ']\t')
             file.write(tid + '\t')
             file.write(content + '\t')
             file.write(
-                'department 1:' + department_1 +\
-                '\tdepartment 2: ' + department_2 +\
-                '\tdepartment 3: ' + department_3 + '\n'            
+                'department 1: ' + department_1 + '\t'\
+                'department 2: ' + department_2 + '\t'\
+                'department 3: ' + department_3 + '\n'            
             )
 
         # 返回派单结果
