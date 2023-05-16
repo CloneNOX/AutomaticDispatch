@@ -131,7 +131,6 @@ dmypy.json
 # added by this repo
 data/
 model/
-hierarchical/
 log/
 tmp/
 flask_bag/
@@ -148,6 +147,8 @@ ticket_info.txt
 *.ppt
 *.pptx
 train_log.txt
-hierarchical/checkpoint
+hierarchical/checkpoint/
+hierarchical/export/
 *.7z
 checkpoint*
+nohup.out
