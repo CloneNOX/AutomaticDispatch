@@ -1,6 +1,5 @@
 import functools
 import os
-import sys
 from tqdm import tqdm
 
 import paddle
@@ -12,16 +11,17 @@ from paddlenlp.data import DataCollatorWithPadding
 from paddlenlp.datasets import load_dataset
 from paddlenlp.transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-class myPaddleHierarchical:
-    def __init__(self,
-                 device = 'gpu',
-                 dataset_dir = './data/',
-                 params_path = './model/checkpoint/',
-                 max_seq_length = 128,
-                 batch_size = 32,
-                 data_file = 'data.txt',
-                 label_file = 'label.txt'
-        ):
+class MyPaddleHierarchical:
+    def __init__(
+        self,
+        device = 'gpu',
+        dataset_dir = './data/',
+        params_path = './model/checkpoint/',
+        max_seq_length = 128,
+        batch_size = 32,
+        data_file = 'data.txt',
+        label_file = 'label.txt'
+    ):
         self.device = device
         self.dataset_dir = dataset_dir
         self.params_path = params_path
@@ -39,6 +39,9 @@ class myPaddleHierarchical:
             self.tokenizer = AutoTokenizer.from_pretrained(path)
 
     def predict(self, sentence: str):
+        '''
+        预测单条文本的标签
+        '''
         paddle.set_device(self.device)
 
         # 加载标签文件
@@ -64,7 +67,6 @@ class myPaddleHierarchical:
         # batchify dataset
         collate_fn = DataCollatorWithPadding(self.tokenizer)
         data_batch_sampler = BatchSampler(data_ds, batch_size=1, shuffle=False)
-
         data_data_loader = DataLoader(dataset=data_ds, batch_sampler=data_batch_sampler, collate_fn=collate_fn)
 
         # predict
@@ -94,7 +96,7 @@ class myPaddleHierarchical:
             for i, line in enumerate(f):
                 label_list.append(line.strip())
 
-        # 加载数据集
+        # 单条数据读入成数据集，适配
         if data_file is None:
             data_file = self.data_file
         data_ds = load_dataset(
@@ -131,23 +133,31 @@ class myPaddleHierarchical:
     
 # end of myPaddleHierarchical
 
-# 读入单条文本作为测试样例
 def read_single_sent_dataset(data_line, label_list=None, is_test=False):
-        data = [data_line]
-        for line in data:
-            if is_test:
-                items = line.strip().split("\t")
-                sentence = "".join(items)
-                yield {"sentence": sentence}
+    '''
+    读入单条文本作为测试样例，适配paddle的数据集加载形式
+    Input:
+        - dataline(str): 输入的单条文本
+        - label_list(list): 文本所属的标签，可以没有
+        - is_test(bool): 是否是测试数据，决定了生成器返回的字典是否有label字段
+    Output:
+        - 返回dict的生成器
+    '''
+    data = [data_line]
+    for line in data:
+        if is_test:
+            items = line.strip().split("\t")
+            sentence = "".join(items)
+            yield {"sentence": sentence}
+        else:
+            items = line.strip().split("\t")
+            if len(items) == 0:
+                continue
+            elif len(items) == 1:
+                sentence = items[0]
+                labels = []
             else:
-                items = line.strip().split("\t")
-                if len(items) == 0:
-                    continue
-                elif len(items) == 1:
-                    sentence = items[0]
-                    labels = []
-                else:
-                    sentence = "".join(items[:-1])
-                    label = items[-1]
-                    labels = [label_list[l] for l in label.split(",")]
-                yield {"sentence": sentence, "label": labels}
+                sentence = "".join(items[:-1])
+                label = items[-1]
+                labels = [label_list[l] for l in label.split(",")]
+            yield {"sentence": sentence, "label": labels}

@@ -13,10 +13,16 @@ with open('./config.json', 'r') as f:
     s = f.read()
     config = json.loads(s)
 data_path = config['data_path']
-
-# 数据预处理，从文件中读取了原始文本之后，进行文本内容的修改或添加。
+ 
 def preProcess(text: str):
-    # 保留
+    '''
+    数据预处理，从文件中读取了原始文本之后，进行文本内容的修改或添加。
+    目前暂时是一个保留接口，功能仅保留文本中的中文字符、数字、英文字母
+    Input:
+        - text: 待处理文本
+    Ouput:
+        - text: 处理后文本
+    '''
     text = re.sub(r'[^\u4e00-\u9fa50-9a-zA-z]+', '', text)
     return text
 
