@@ -3,14 +3,13 @@
 from flask import Flask, render_template, request,jsonify
 from flask_restful import Resource, Api
 import json
-import pandas as pd
 import numpy as np
 import time
 import utils
 import os
 import signal
 from datetime import datetime
-from model import MyFastText
+from onnxModel import OnnxHierarchical
 
 # 放在header中的apptoken的值,用于验证客户端身份
 APP_TOKEN = 'DAT3X71FH87_2sB'
@@ -18,23 +17,14 @@ APP_TOKEN = 'DAT3X71FH87_2sB'
 app = Flask(__name__)
 app.config.update(RESTFUL_JSON=dict(ensure_ascii=False))
 API = Api(app)
-# 装载配置文件
-config = {}
-with open('./config.json', 'r') as f:
-    config = json.loads(f.read())
 
-# 无参数路由，打开初始页面
+# 无参数路由，打开Index页面
 @app.route('/')
 def start():
     return render_template('index.html')
 
 # 文本分类模型
-model_1 = MyFastText()
-model_1.load_model(config['model_path'] + config['model_label_1_name'])
-model_2 = MyFastText()
-model_2.load_model(config['model_path'] + config['model_label_2_name'])
-model_3 = MyFastText()
-model_3.load_model(config['model_path'] + config['model_label_3_name'])
+model = OnnxHierarchical()
 
 class Dispatch(Resource):
     def post(self):
@@ -60,27 +50,56 @@ class Dispatch(Resource):
         f_content = f.read().decode('utf-8')
 
         # 提取工单内容，分词（按字符分词，字符之间用空格隔开）
-        content = utils.fixText(f_content)
+        content = ''.join(utils.fixText(f_content))
 
         # 分类预测
-        result_1 = model_1.predict(content)
-        result_2 = model_2.predict(content)
-        result_3 = model_3.predict(content)
-        department_1 = result_1[0][0][9:]
-        department_2 = result_2[0][0][9:]
-        department_3 = result_3[0][0][9:]
-        probs_1 = result_1[1][0]
-        probs_2 = result_2[1][0]
-        probs_3 = result_3[1][0]
+        result = model(content) # result: [(label_1, prob_1), (label_2, prob_2), (label_3, prob_3)]
+        error_info = []
+        try: 
+            department_1 = result[0][0]
+            probs_1 = float(result[0][1])
+            if 'undefine' in department_1:
+                department_1 = '无对应一级办理部门'
+        except Exception as e:
+            error_info.append('level 1 raise error: ' + str(e))
+            department_1 = '无对应一级办理部门'
+            probs_1 = 0.99
+
+        try:
+            department_2 = result[1][0]
+            department_2 = department_2.split('##')[1]
+            if 'undefine' in department_2:
+                department_2 = '无对应二级办理部门'
+            probs_2 = float(result[1][1])
+        except Exception as e:
+            error_info.append('level 2 raise error: ' + str(e))
+            department_2 = '无对应二级办理部门'
+            probs_2 = 0.99
+
+        try:
+            department_3 = result[2][0]
+            department_3 = department_3.split('##')[2]
+            if 'undefine' in department_3:
+                department_3 = '无对应三级办理部门'
+            probs_3 = float(result[2][1])
+        except Exception as e:
+            error_info.append('level 3 raise error: ' + str(e))
+            department_3 = '无对应三级办理部门'
+            probs_3 = 0.99
 
         with open('./ticket_info.txt', 'a') as file:
-            file.write('[' + datetime.now().strftime(r'%Y-%m-%d %H:%M:%S') + '] ')
-            file.write(tid + ' ')
-            file.write(content)
+            file.write('[' + datetime.now().strftime(r'%Y-%m-%d %H:%M:%S') + ']\t')
+            file.write(tid + '\t')
+            file.write(content + '\t')
             file.write(
-                'department 1:' + department_1 +\
-                ', department 2: ' + department_2 +\
-                ', department 3: ' + department_3 + '\n'            
+                'department 1: ' + department_1 + '\t' + \
+                'probs_1: ' + str(probs_1) + '\t' + \
+                'department 2: ' + department_2 + '\t' + \
+                'probs_2: ' + str(probs_2) + '\t' + \
+                'department 3: ' + department_3 + '\t' + \
+                'probs_3: ' + str(probs_3) + '\t' + \
+                'result: ' + str(result) + '\t' + \
+                'error info: ' + str(error_info) + '\n'
             )
 
         # 返回派单结果
@@ -117,5 +136,9 @@ def kill_pid_if_exists():
 
 if __name__ == '__main__':
     kill_pid_if_exists()
-    # 必须加上 host='0.0.0.0' 否则只能通过 127.0.0.1 访问接口
+    # 初始化记录文档
+    with open('./ticket_info.txt', 'w') as file:
+        pass
+    with open('./app_run_log.txt', 'w') as file:
+        pass
     app.run(host='0.0.0.0')
