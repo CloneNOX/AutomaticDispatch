@@ -151,9 +151,6 @@ hierarchical/checkpoint/
 hierarchical/export/
 *.7z
 checkpoint*
-ticket_info.bak.txt
-app_run_log.txt
-app_run_log.bak.txt
-nohup.out
-ticket_test.txt
-pip_command.txt
+*.txt
+*.one
+*.tar
